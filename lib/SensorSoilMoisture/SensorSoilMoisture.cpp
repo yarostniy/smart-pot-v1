@@ -11,8 +11,11 @@ void initSoilMoisture()
   // Задаем таймер пробуждения равный интервалу проверки минус 1 секунду
   esp_sleep_enable_timer_wakeup(INTERVAL_SEC_CHECK_SOIL_MOSTURE - 1 * uS_TO_S_FACTOR);
   pinMode(PORT_SOIL_MOSTURE, INPUT);
+  // Первые показания считываем через 15 сек после запуска устройства
   timerCheckSoilMosture.once(15, []() {
     readyForReadSensorSoilMosture = true;
+    timerCheckSoilMosture.detach();
+    // Вешаем основной таймер проверки датчика почвы по расписанию
     timerCheckSoilMosture.attach(INTERVAL_SEC_CHECK_SOIL_MOSTURE,
                                  []() { readyForReadSensorSoilMosture = true; });
   });
@@ -40,14 +43,14 @@ void agentCheckSoilMosture(int minSoilMostureValue = 20)
 {
   int soilMosuture = getSoilMoisture();
   Serial.println(String(soilMosuture) + "%");
-  // Влажность почвы ниже минимально возможной для растения
+  // Влажность почвы ниже минимально возможной для растения, начинаем моргать светодиодом
   if (soilMosuture < minSoilMostureValue)
   {
     timerLedBlink.detach();
     timerLedBlink.attach(1,
                          []() {
                            setLedBlue(HIGH);
-                           delay(300);
+                           delay(250);
                            setLedBlue(LOW);
                          });
     esp_light_sleep_start();
