@@ -1,5 +1,5 @@
-#include "WiFi.h"
 #include <Arduino.h>
+#include "WiFi.h"
 #include <Led.h>
 #include <SensorSoilMoisture.h>
 
@@ -22,7 +22,7 @@ void setup()
   // Настраиваем пины для диодов
   initLed();
 
-  // Переводим устройсво в режим легкого сна
+  // Переводим устройсво в режим легкого сна для экономии заряда
   esp_light_sleep_start();
 }
 
