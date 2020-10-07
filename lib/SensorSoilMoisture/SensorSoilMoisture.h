@@ -16,7 +16,7 @@ extern Ticker timerCheckSoilMosture;
 // Объект таймера для моргания диодом при тревоге
 extern Ticker timerLedBlink;
 
-// Готовность к чтению датчика влажности почвы,
+// Готовность к чтению датчика влажности почвы, используем с таймером
 extern volatile bool readyForReadSensorSoilMosture;
 
 // Инициализация пина датчика влажности
